@@ -7,21 +7,21 @@ import java.util.ArrayList;
 */  
 public class Player{
     
-    private ArrayList<Integer> cards = new ArrayList<Integer>();
+    private ArrayList<Card> cards = new ArrayList<Card>();
     private int points;
     private String name;
     
-    public Player(ArrayList<Integer> c, int p, String n){
+    public Player(ArrayList<Card> c, int p, String n){
         cards = c;
         points = p;
         name = n;
     }
     
-    public ArrayList<Integer> getCards(){
+    public ArrayList<Card> getCards(){
         return cards;
     }
     
-    public void setCards(ArrayList<Integer> c){
+    public void setCards(ArrayList<Card> c){
         cards = c;
     }
     
@@ -42,13 +42,13 @@ public class Player{
      * removes them and increments the point value when necessary.
      */
     public void CompareHand(){  
-        ArrayList<Integer> hand = cards;
+        ArrayList<Card> hand = cards;
         
         for (int i = 0; i < hand.size() - 1; i++){
             for (int j = i + 1; j < hand.size(); j++){
-                if (hand.get(i) == hand.get(j)){
+                if (hand.get(i).getCard().equals(hand.get(j).getCard())){
                     points++;
-                    System.out.println(name + " a match with: " + hand.get(i) + " and " + hand.get(j) + ".");
+                    System.out.println(name + " a match with: " + hand.get(i).getCard() + " and " + hand.get(j).getCard() + ".");
                     System.out.println(name + " " + points + " point(s).");
                     hand.remove(i);
                     hand.remove(j - 1);
@@ -59,10 +59,13 @@ public class Player{
     }
     
     /**
-     * Displays the current contents of the player's hand
+     * Displays cards in hand
      */
-    public void displayHand() {
-    	System.out.println("Your current hand is: ");
-    	System.out.println(cards.toString());
+    public void displayHand(){ 
+        System.out.print("Your current hand is: ");
+        for (int i = 0; i < cards.size(); i++) {
+        	System.out.print(cards.get(i).getCard() + ", ");
+        }
+        System.out.println();
     }
 }

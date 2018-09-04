@@ -21,7 +21,7 @@ public class gofishFrame {
 	public gofishFrame() {
 		
 		mainFrame = new JFrame();
-		mainFrame.setSize(800,580);
+		mainFrame.setSize(900,580);
 		mainFrame.setLayout(new BorderLayout());
 		playerPanel();
 		computerPanel();
@@ -99,7 +99,7 @@ public class gofishFrame {
 	 * side of the game depending on how many cards they are holding.
 	 * @param hand
 	 */
-	public void updateComputerCards(ArrayList<Integer> hand) {
+	public void updateComputerCards(ArrayList<Card> hand) {
 		cpuLabelPanel.removeAll();
 		for (int i = 0; i < hand.size(); i++) {
 			cpuLabelPanel.add(computerCardLabels.get(i));
@@ -107,5 +107,22 @@ public class gofishFrame {
 		}
 		cpuLabelPanel.revalidate();
 		cpuLabelPanel.repaint();
+	}
+	
+	/**
+	 * Updates the cards being displayed on the player's side.
+	 * @param hand
+	 */
+	public void updatePlayerCards(ArrayList<Card> hand) {
+		playerLabelPanel.removeAll();
+		playerCardLabels.clear();
+		BufferedImage tempImage = null;
+		for (int i = 0; i < hand.size(); i++) {
+			playerCardLabels.add(new JLabel(new ImageIcon(hand.get(i).getImg())));
+			playerLabelPanel.add(playerCardLabels.get(i));
+			playerLabelPanel.add(b.createHorizontalStrut(10));
+		}
+		playerLabelPanel.revalidate();
+		playerLabelPanel.repaint();
 	}
 }

@@ -21,17 +21,17 @@ public class Card {
 		try {
 			tempImage = ImageIO.read(getClass().getResource(path));
 		} catch (Exception e) {
-			System.out.println("Error loading image - " + e.getMessage());
+			System.out.println("Error loading image - " + path + " " + e.getMessage());
 			System.exit(0);
 		}
 		img = tempImage;
 	}
 	
-	public String getNumber() {
+	public String getCard() {
 		return card;
 	}
 
-	public void setNumber(String c) {
+	public void setCard(String c) {
 		this.card = c;
 	}
 
