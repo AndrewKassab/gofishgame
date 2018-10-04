@@ -29,8 +29,8 @@ public class Player{
         return points;
     }
     
-    public void setPoints(int p){
-        points = p;
+    public void incrementPoints(){
+        points++;
     }
     
     public String getName(){

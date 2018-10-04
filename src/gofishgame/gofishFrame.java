@@ -8,15 +8,18 @@ import javax.swing.*;
 
 public class gofishFrame {
 
-	JFrame mainFrame;
-	JLabel deckLabel;
-	ArrayList<JLabel> computerCardLabels = new ArrayList<JLabel>();
-	ArrayList<JLabel> playerCardLabels = new ArrayList<JLabel>();
-	JPanel playerPanel;
-	JPanel playerLabelPanel;
-	JPanel computerPanel;
-	JPanel cpuLabelPanel;
-	Box b = null; // For creating struts
+	private JFrame mainFrame;
+	private JLabel deckLabel;
+	private ArrayList<JLabel> computerCardLabels = new ArrayList<JLabel>();
+	private ArrayList<JLabel> playerCardLabels = new ArrayList<JLabel>();
+	private JPanel playerPanel;
+	private JPanel playerLabelPanel;
+	private JTextField playerScore;
+	private JPanel computerPanel;
+	private JPanel cpuLabelPanel;
+	private JTextField computerScore;
+	private Font font1 = new Font("SansSerif", Font.BOLD, 25);
+	private Box b = null; // For creating struts
 	
 	public gofishFrame() {
 		
@@ -34,19 +37,26 @@ public class gofishFrame {
 	
 	public void playerPanel() {
 		playerPanel = new JPanel();
-		playerPanel.setPreferredSize(new Dimension(100,290));
-		playerPanel.setBackground(Color.GREEN);
+		playerPanel.setPreferredSize(new Dimension(100,230));
 		playerPanel.setLayout(new BorderLayout());
+		playerPanel.setBackground(Color.BLUE);
 		
 		// Creates whitespace around border
-		playerPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 20));
+		playerPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 20, 20));
 		
 		playerLabelPanel = new JPanel();
-		playerLabelPanel.setPreferredSize(new Dimension(100,180));
+		playerLabelPanel.setPreferredSize(new Dimension(100,160));
 		playerLabelPanel.setBackground(Color.BLACK);
 		playerLabelPanel.setLayout(new BoxLayout(playerLabelPanel, BoxLayout.X_AXIS));
 		
+		playerScore = new JTextField();
+		playerScore.setText("Score: 0 ");
+		playerScore.setEditable(false);
+		playerScore.setFont(font1);
+		playerScore.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
+		
 		playerPanel.add(playerLabelPanel, BorderLayout.SOUTH);
+		playerPanel.add(playerScore, BorderLayout.LINE_END);
 	}
 	
 	public void computerPanel() {
@@ -54,14 +64,13 @@ public class gofishFrame {
 		computerPanel = new JPanel();
 		computerPanel.setPreferredSize(new Dimension(100,310));
 		computerPanel.setLocation(0,400);
-		computerPanel.setBackground(Color.BLUE);
 		computerPanel.setLayout(new BorderLayout());
 		
 		// Creates whitespace around border
 		computerPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 0, 20)); 
 		
 		cpuLabelPanel = new JPanel();
-		cpuLabelPanel.setPreferredSize(new Dimension(100,180)); // Contains card images
+		cpuLabelPanel.setPreferredSize(new Dimension(50,180)); // Contains card images
 		cpuLabelPanel.setBackground(Color.BLACK);
 		cpuLabelPanel.setLayout(new BoxLayout(cpuLabelPanel, BoxLayout.X_AXIS));
 		
@@ -90,7 +99,14 @@ public class gofishFrame {
 			computerCardLabels.add(new JLabel(new ImageIcon(deck)));
 		}
 		
+		computerScore = new JTextField();
+		computerScore.setText("Score: 0");
+		computerScore.setEditable(false);
+		computerScore.setFont(font1);
+		computerScore.setPreferredSize(new Dimension(100,100));
+		
 		computerPanel.add(deckLabel, BorderLayout.SOUTH);
+		computerPanel.add(computerScore);
 		
 	}
 	
@@ -124,5 +140,9 @@ public class gofishFrame {
 		}
 		playerLabelPanel.revalidate();
 		playerLabelPanel.repaint();
+	}
+	
+	public void updateScoreBoard(int score) {
+		playerScore.setText("Score: " + score);
 	}
 }
