@@ -1,5 +1,6 @@
 package gofishgame;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Stack;
 import java.util.Random;
@@ -79,6 +80,7 @@ public class Gofish {
     
     /**
      * Creates a standard shuffled deck of 52 cards.
+     * TODO: 7 of diamond has ugly low-res picture
      * @return the shuffled deck in the form of a stack.
      */
     public static MyStack<Card> createShuffledDeck(){ 
@@ -177,6 +179,8 @@ public class Gofish {
         ArrayList<Card> hand1 = new ArrayList<Card>(); // Creates ArrayList for Player's hand
         ArrayList<Card> hand2 = new ArrayList<Card>(); // Creates ArrayList for CPU's hand
         gofishFrame frame = new gofishFrame();
+        PrintStream printStream = new PrintStream(new CustomOutputStream(frame.getOutputArea()));
+        System.setOut(printStream);
         
         String cpuchosen;
         int indexCpuChosen = 0;
@@ -204,7 +208,7 @@ public class Gofish {
         player.CompareHand(); // Check for matches
         
         frame.updatePlayerCards(hand1);
-        frame.updateScoreBoard(player.getPoints());
+        
         
         System.out.println("----------------------------------------------");
         
@@ -213,6 +217,7 @@ public class Gofish {
         Player computer = new Player(hand2, 0,name2); // Create CPU
         
         computer.CompareHand(); // Check for matches
+        frame.updateScoreBoard(player.getPoints(), computer.getPoints());
         frame.updateComputerCards(hand2);
         
         System.out.println("----------------------------------------------");
@@ -235,7 +240,7 @@ public class Gofish {
                          }
                      }
                      if (cont != true){
-                         System.out.println("Please try again, you do not have a " + pchosen);
+                    	 System.out.println("Please try again, you do not have a " + pchosen + ".");
                      }
                 } while (cont != true); // Until player requests a card that is in their hand
                
@@ -253,7 +258,7 @@ public class Gofish {
                 }
                 if (player.getPoints() > current){ // If CPU had requested card
                     System.out.println("There is a match, your opponent gives up their " + SeekingCard.getCard() + "."); 
-                    frame.updateScoreBoard(player.getPoints());
+                    frame.updateScoreBoard(player.getPoints(), computer.getPoints());
                     player.displayHand();
                     System.out.println("----------------------------------------------");
                 }
@@ -265,7 +270,7 @@ public class Gofish {
                     System.out.print("\n");
                     player.setCards(hand1);
                     player.CompareHand();
-                    frame.updateScoreBoard(player.getPoints());
+                    frame.updateScoreBoard(player.getPoints(), computer.getPoints());
                     player.displayHand();
                     System.out.print("----------------------------------------------\n");
                 }
@@ -311,6 +316,7 @@ public class Gofish {
                 if (computer.getPoints() > current){ // If player has requested card
                     System.out.println("You've given up your " + CardWanted.getCard()); 
                     System.out.println("The CPU now has " + computer.getPoints() + " point(s).");
+                    frame.updateScoreBoard(player.getPoints(), computer.getPoints());
                     player.displayHand();                    
                     System.out.println("----------------------------------------------");
                 }
@@ -318,6 +324,7 @@ public class Gofish {
                     System.out.println("Too bad. Your opponent fishes a card from the deck.");
                     hand2.add(deck.pop());
                     computer.CompareHand();
+                    frame.updateScoreBoard(player.getPoints(), computer.getPoints());
                     System.out.println("----------------------------------------------");
                 }
             }
