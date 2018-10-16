@@ -10,6 +10,11 @@ import java.applet.*;
 
 import javax.imageio.ImageIO;
 
+/**
+ * Object class for a playing card
+ * @author PreciseMotion
+ * @version 2.0
+ */
 public class Card {
 	
 	String card;

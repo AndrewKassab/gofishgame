@@ -1,16 +1,18 @@
 package gofishgame;
 
+import graphics.GofishFrame;
+
 public class Main {
 
 	/**
-	 * The Main Method
+	 * The Main driver for our game of Go Fih.
 	 * @param args
 	 * @throws InterruptedException
 	 */
 	public static void main(String[] args) throws InterruptedException {
 		
-		
-		Gofish game = new Gofish();
+		GofishFrame frame = new GofishFrame();
+		Gofish game = new Gofish(frame);
 
 	}
 

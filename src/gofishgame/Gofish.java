@@ -82,25 +82,27 @@ class MyStack<T> implements StackInterface<T>
  */
 public class Gofish {
     
+	private GofishFrame frame;
 	private MyStack<Card> deck = new MyStack<Card>(); // Creates stack for deck of cards
 	private ArrayList<Card> hand1 = new ArrayList<Card>(); // Creates ArrayList for Player's hand
 	private ArrayList<Card> hand2 = new ArrayList<Card>(); // Creates ArrayList for CPU's hand
-	private GofishFrame frame = new GofishFrame(); // TODO move to main
-	private PrintStream printStream = new PrintStream(new CustomOutputStream(frame.getOutputArea()));
-	private String cpuchosen;
+	private PrintStream printStream;
 	private int indexCpuChosen = 0;
 	private String pchosen;
 	private int indexPlayerChosen = 0;
-	private String name1 = "You have"; 
-	private String name2 = "The CPU has";
 	private Player player;
 	private Player computer;
 	
 	/**
-	 * The constructor. Sets values for each variable and prepares
+	 * The constructor. Sets values for each variable and prepares the
+	 * player's and their hands for the game execution.
 	 * @throws InterruptedException 
 	 */
-	public Gofish() throws InterruptedException {
+	public Gofish(GofishFrame frame) throws InterruptedException {
+		
+		this.frame = frame;
+		
+		printStream = new PrintStream(new CustomOutputStream(frame.getOutputArea()));
 		
 		System.setOut(printStream);
 		deck = createShuffledDeck();
@@ -113,50 +115,56 @@ public class Gofish {
             hand2.add(deck.pop());
         }            
         
-        player = new Player(hand1, 0,name1);     
+        player = new Player(hand1,true);     
         frame.updatePlayerCards(hand1);
+        
         player.CompareHand(); // Check for matches
         frame.updatePlayerCards(hand1);
         
-        System.out.println("----------------------------------------------");
+        System.out.println("--------------------------------------------------");
         
-        computer = new Player(hand2, 0,name2); 
+        computer = new Player(hand2,false); 
         
         computer.CompareHand(); // Check for matches
         frame.updateScoreBoard(player.getPoints(), computer.getPoints());
         frame.updateComputerCards(hand2);
         
-        System.out.println("----------------------------------------------");
+        System.out.println("--------------------------------------------------");
         
-        gameLoop();
-        
-        // hand2 = computer.getCards();
+        gameLoop(); // Begins game
 		
 	}
 	
 	/**
-	 * Handles the loop to play the game
+	 * Handles the loop to execute the game.
 	 * @throws InterruptedException pause game for user to process results
 	 */
 	public void gameLoop() throws InterruptedException {
-		do {
-            if (!(hand1.isEmpty())){
+		
+		do {  
+			// If player has cards
+			if (!(hand1.isEmpty())){
+            	
                 boolean cont = false;
-                do{
-                     pchosen = JOptionPane.showInputDialog("Which card would you like to inquire your opponent for?"); // Player requests card
-                     for (int i = 0; i < hand1.size(); i++){  
+                
+                do{  
+                	
+                	// Player requests card
+                    pchosen = JOptionPane.showInputDialog("Which card would you like to inquire your opponent for?"); 
+                    for (int i = 0; i < hand1.size(); i++){ 
                          if (Character.toUpperCase(pchosen.charAt(0)) == hand1.get(i).getCard().charAt(0)){  // Makes sure player has requested card
                              indexPlayerChosen = i;               
                              cont = true;
                              break;
                          }
                      }
-                     if (cont != true){
+                    
+                    if (cont != true){
                     	 System.out.println("Please try again, you do not have a " + pchosen + ".");
-                     }
-                } while (cont != true); // Until player requests a card that is in their hand
+                    }
+                    
+                } while (cont != true); // Until player requests a valid card
                
-            
                 int current = player.getPoints();
                 Card SeekingCard = hand1.get(indexPlayerChosen);
             
@@ -168,30 +176,30 @@ public class Gofish {
                         break;
                     }
                 }
+                
                 if (player.getPoints() > current){ // If CPU had requested card
-                    System.out.println("There is a match, your opponent gives up their " + SeekingCard.getCard() + "."); 
+                    System.out.println("There is a match, your opponent       gives up their " + SeekingCard.getCard() + "."); 
                     frame.updateScoreBoard(player.getPoints(), computer.getPoints());
                     
-                    System.out.println("----------------------------------------------");
+                    System.out.println("--------------------------------------------------");
                 }
                 else { // If CPU did not have requested card
-                    System.out.println("Your opponent does not have a " + SeekingCard.getCard() + ". Sorry, go fish");
+                    System.out.println("Your opponent does not have a " + SeekingCard.getCard() + ".    Sorry, go fish.");
                     hand1.add(deck.pop());
-                    System.out.println("You drew a " + hand1.get(hand1.size()- 1).getCard());
-                    
-                    System.out.print("\n");
+                    System.out.println("You drew a " + hand1.get(hand1.size()- 1).getCard() + ".");
                     player.setCards(hand1);
                     player.CompareHand();
                     frame.updateScoreBoard(player.getPoints(), computer.getPoints());
                     
-                    System.out.print("----------------------------------------------\n");
+                    System.out.print("--------------------------------------------------\n");
                 }
             }
-            else { // If player's hand is empty
+			// If player's hand is empty
+            else { 
                 hand1.add(deck.pop());
                 System.out.println("You drew a " + hand1.get(hand1.size()- 1).getCard());
                 
-                System.out.println("----------------------------------------------");
+                System.out.println("--------------------------------------------------");
             }
             
             frame.updatePlayerCards(hand1);
@@ -229,14 +237,14 @@ public class Gofish {
                     System.out.println("You've given up your " + CardWanted.getCard()); 
                     System.out.println("The CPU now has " + computer.getPoints() + " point(s).");
                     frame.updateScoreBoard(player.getPoints(), computer.getPoints());                    
-                    System.out.println("----------------------------------------------");
+                    System.out.println("--------------------------------------------------");
                 }
                 else { // If player does not have requested card
-                    System.out.println("Too bad. Your opponent fishes a card from the deck.");
+                    System.out.println("Too bad. Your opponent fishes a cardfrom the deck.");
                     hand2.add(deck.pop());
                     computer.CompareHand();
                     frame.updateScoreBoard(player.getPoints(), computer.getPoints());
-                    System.out.println("----------------------------------------------");
+                    System.out.println("--------------------------------------------------");
                 }
             }
             else if (!deck.isEmpty()){ // If CPU's hand is empty
@@ -251,11 +259,10 @@ public class Gofish {
         } while (!(deck.isEmpty())); // While the deck still has cards
         
         System.out.println("The deck is empty! The game has finished!");
-        System.out.println("You have " + player.getPoints());
-        System.out.println("The CPU has " + computer.getPoints());
         
         Thread.sleep(1000);
         
+        // TODO: Make a determine winner method.
         if (player.getPoints() > computer.getPoints()){ // Determines the winner
             System.out.println("Congratulations! You are the winner!");
         }

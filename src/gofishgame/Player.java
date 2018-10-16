@@ -3,18 +3,22 @@ package gofishgame;
 import java.util.ArrayList;
 
 /** 
- * Class to store and retrieve the variables for a player.
+ * Object Class for a Go Fish player.
 */  
 public class Player{
     
     private ArrayList<Card> cards = new ArrayList<Card>();
     private int points;
-    private String name;
+    private String message;
     
-    public Player(ArrayList<Card> c, int p, String n){
-        cards = c;
-        points = p;
-        name = n;
+    public Player(ArrayList<Card> c, boolean isPlayer){
+    	cards = c;
+        points = 0;
+        
+        if (isPlayer) {
+        	message = "You have";
+        }
+        else message = "The CPU has";
     }
     
     public ArrayList<Card> getCards(){
@@ -33,39 +37,27 @@ public class Player{
         points++;
     }
     
-    public String getName(){
-        return name;
-    }
     
     /**
      * Finds matching cards within the player's hand, 
      * removes them and increments the point value when necessary.
      */
     public void CompareHand(){  
-        ArrayList<Card> hand = cards;
+        
+    	ArrayList<Card> hand = cards;
         
         for (int i = 0; i < hand.size() - 1; i++){
-            for (int j = i + 1; j < hand.size(); j++){
-                if (hand.get(i).getCard().equals(hand.get(j).getCard())){
+            for (int j = i + 1; j < cards.size(); j++){
+                if (cards.get(i).getCard().equals(cards.get(j).getCard())){
                     points++;
-                    System.out.println(name + " a match with: " + hand.get(i).getCard() + " and " + hand.get(j).getCard() + ".");
-                    System.out.println(name + " " + points + " point(s).");
-                    hand.remove(i);
-                    hand.remove(j - 1);
+                    System.out.println(message + " a match with: " + cards.get(i).getCard() + " and " + cards.get(j).getCard() + ".");
+                    cards.remove(i);
+                    cards.remove(j - 1);
                     CompareHand();    
                 }
             }
         } 
+        
     }
     
-    /**
-     * Displays cards in hand
-     */
-    public void displayHand(){ 
-        System.out.print("Your current hand is: ");
-        for (int i = 0; i < cards.size(); i++) {
-        	System.out.print(cards.get(i).getCard() + ", ");
-        }
-        System.out.println();
-    }
 }

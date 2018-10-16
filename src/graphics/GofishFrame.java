@@ -7,6 +7,11 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import gofishgame.Card;
 
+/**
+ * TODO: Add in continue button instead of using jOptionPane
+ * @author PreciseMotion
+ *
+ */
 public class GofishFrame {
 
 	private JFrame mainFrame;
@@ -25,12 +30,17 @@ public class GofishFrame {
 	private Font font2 = new Font("SansSerif", Font.BOLD, 18); // used for output window
 	private Box b = null; // For creating struts
 	
+	/**
+	 * The Constructor. Creates a new JFrame and calls the methods required to 
+	 * create all swing components that will be present on the frame.
+	 */
 	public GofishFrame() {
 		
 		mainFrame = new JFrame("Go Fish!");
 		mainFrame.setSize(900,580);
 		mainFrame.setLayout(new BorderLayout());
 		mainFrame.getRootPane().setBorder(BorderFactory.createMatteBorder(4, 4, 4, 4, Color.BLACK));
+		createText();
 		playerPanel();
 		computerPanel();
 		mainFrame.add(playerPanel, BorderLayout.SOUTH);
@@ -40,14 +50,17 @@ public class GofishFrame {
 	
 	}
 	
+	/**
+	 * Creates the player panel and handles all components belonging to it.
+	 */
 	public void playerPanel() {
+		
 		playerPanel = new JPanel();
 		playerPanel.setPreferredSize(new Dimension(100,200));
 		playerPanel.setLayout(new BorderLayout());
 		
-		// Creates whitespace around border
-		playerPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 20, 20));
-		
+		playerPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 5, 5)); 
+
 		playerLabelPanel = new JPanel();
 		playerLabelPanel.setPreferredSize(new Dimension(100,140));
 		playerLabelPanel.setBackground(Color.BLACK);
@@ -65,7 +78,7 @@ public class GofishFrame {
 	}
 	
 	/**
-	 * TODO: Move textArea handling to its own method
+	 * Creates the CPU panel and handles all components belonging to it.
 	 */
 	public void computerPanel() {
 		
@@ -75,8 +88,8 @@ public class GofishFrame {
 		computerPanel.setLayout(new BorderLayout());
 		
 		// Creates whitespace around border
-		computerPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 0, 20)); 
-		
+		computerPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5)); 
+	
 		cpuLabelPanel = new JPanel();
 		cpuLabelPanel.setPreferredSize(new Dimension(50,170)); // Contains card images
 		cpuLabelPanel.setBackground(Color.BLACK);
@@ -107,6 +120,16 @@ public class GofishFrame {
 			computerCardLabels.add(new JLabel(new ImageIcon(deck)));
 		}
 		
+		
+		
+		computerPanel.add(deckLabel, BorderLayout.CENTER);
+		computerPanel.add(computerScore, BorderLayout.LINE_START);
+		computerPanel.add(outputScrollPane, BorderLayout.EAST);
+		
+	}
+	
+	public void createText() {
+		
 		computerScore = new JTextArea();
 		computerScore.setText("Score: 0");
 		computerScore.setEditable(false);
@@ -115,18 +138,14 @@ public class GofishFrame {
 		computerScore.setBackground(mainFrame.getBackground());
 		
 		outputTextArea = new JTextArea();
-		outputTextArea.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
 		outputTextArea.setFont(font2);
 		outputTextArea.setEditable(false);
 		outputTextArea.setLineWrap(true);
 		outputTextArea.setText("");
 		
 		outputScrollPane = new JScrollPane(outputTextArea);
-		outputScrollPane.setPreferredSize(new Dimension(350,200));
-		
-		computerPanel.add(deckLabel, BorderLayout.CENTER);
-		computerPanel.add(computerScore, BorderLayout.LINE_START);
-		computerPanel.add(outputScrollPane, BorderLayout.EAST);
+		outputScrollPane.setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.GRAY));
+		outputScrollPane.setPreferredSize(new Dimension(350,250));
 		
 	}
 	
