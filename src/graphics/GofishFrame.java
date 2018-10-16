@@ -1,12 +1,13 @@
-package gofishgame;
+package graphics;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import gofishgame.Card;
 
-public class gofishFrame {
+public class GofishFrame {
 
 	private JFrame mainFrame;
 	private JLabel deckLabel;
@@ -24,7 +25,7 @@ public class gofishFrame {
 	private Font font2 = new Font("SansSerif", Font.BOLD, 18); // used for output window
 	private Box b = null; // For creating struts
 	
-	public gofishFrame() {
+	public GofishFrame() {
 		
 		mainFrame = new JFrame("Go Fish!");
 		mainFrame.setSize(900,580);
