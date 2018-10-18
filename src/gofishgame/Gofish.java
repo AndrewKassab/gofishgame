@@ -6,71 +6,8 @@ import java.util.Stack;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.swing.JOptionPane;
-
 import graphics.CustomOutputStream;
 import graphics.GofishFrame;
-
-interface StackInterface<T>
-{   
- 
-    /**
-     * Adds a new entry to the top of the stack. 
-    */
-    public void push( T newEntry );  
-    
-    /**
-     * Removes and returns the stack top entry.
-    */ 
-    public T pop();   
-    
-    /**
-     * Retrieves this stack top entry.
-    */
-    public T peek();   
-    
-    /**
-     * Detects whether the stack is empty.
-    */
-    public boolean isEmpty(); 
-    
-    /**
-     * Removes all entries from the stack.
-    */
-    public void clear();
-}
-
-/**
- * Class implementing StackInterface in order to create 
- * a stack that will act as a deck of cards.
-*/
-class MyStack<T> implements StackInterface<T>
-{
-    Stack<T> theStack;
-    public MyStack()
-    {
-        theStack = new Stack<>();
-    }
-    public void push( T newEntry )
-    {
-        theStack.push( newEntry );
-    }
-    public T peek()
-    {   
-        return theStack.peek();
-    } 
-    public T pop()
-    {   
-        return theStack.pop();
-    } 
-    public boolean isEmpty()
-    {   
-        return theStack.empty();
-    } 
-    public void clear()
-    {   
-        theStack.clear();
-    } 
-}
 
 /**
  * Go Fish game. This class contains all objects and methods 
@@ -83,7 +20,7 @@ class MyStack<T> implements StackInterface<T>
 public class Gofish {
     
 	private GofishFrame frame;
-	private MyStack<Card> deck = new MyStack<Card>(); // Creates stack for deck of cards
+	private MyStack<Card> deck = new MyStack<Card>(frame); // Creates stack for deck of cards
 	private ArrayList<Card> hand1 = new ArrayList<Card>(); // Creates ArrayList for Player's hand
 	private ArrayList<Card> hand2 = new ArrayList<Card>(); // Creates ArrayList for CPU's hand
 	private PrintStream printStream;
@@ -103,9 +40,20 @@ public class Gofish {
 		this.frame = frame;
 		
 		printStream = new PrintStream(new CustomOutputStream(frame.getOutputArea()));
-		
 		System.setOut(printStream);
-		deck = createShuffledDeck();
+		
+		initCards();
+        gameLoop(); // Begins game
+		
+	}
+	
+	/**
+	 * Handles initialization of the card deck and each player's hand 
+	 * and sets up the game for it to begin.
+	 */
+	public void initCards() {
+		
+		createShuffledDeck();
 		
 		for (int i = 0; i < 7; i++){ // Player draws 7 cards
             hand1.add(deck.pop());
@@ -121,18 +69,14 @@ public class Gofish {
         player.CompareHand(); // Check for matches
         frame.updatePlayerCards(hand1);
         
-        System.out.println("--------------------------------------------------");
-        
         computer = new Player(hand2,false); 
         
         computer.CompareHand(); // Check for matches
-        frame.updateScoreBoard(player.getPoints(), computer.getPoints());
+        
+        System.out.println("------------------------------------------------");
+        frame.updateScoreboard(player.getPoints(), computer.getPoints());
         frame.updateComputerCards(hand2);
         
-        System.out.println("--------------------------------------------------");
-        
-        gameLoop(); // Begins game
-		
 	}
 	
 	/**
@@ -178,18 +122,18 @@ public class Gofish {
                 }
                 
                 if (player.getPoints() > current){ // If CPU had requested card
-                    System.out.println("There is a match, your opponent       gives up their " + SeekingCard.getCard() + "."); 
-                    frame.updateScoreBoard(player.getPoints(), computer.getPoints());
+                    System.out.println("There is a match.\nYour opponent gives up their " + SeekingCard.getCard() + "."); 
+                    frame.updateScoreboard(player.getPoints(), computer.getPoints());
                     
                     System.out.println("--------------------------------------------------");
                 }
                 else { // If CPU did not have requested card
-                    System.out.println("Your opponent does not have a " + SeekingCard.getCard() + ".    Sorry, go fish.");
+                    System.out.println("Your opponent does not have a " + SeekingCard.getCard() + ".\nSorry, go fish.");
                     hand1.add(deck.pop());
                     System.out.println("You drew a " + hand1.get(hand1.size()- 1).getCard() + ".");
                     player.setCards(hand1);
                     player.CompareHand();
-                    frame.updateScoreBoard(player.getPoints(), computer.getPoints());
+                    frame.updateScoreboard(player.getPoints(), computer.getPoints());
                     
                     System.out.print("--------------------------------------------------\n");
                 }
@@ -220,7 +164,7 @@ public class Gofish {
                     } while (indexCpuChosen == currentChosen); 
                 }
                 
-                System.out.println("Your opponent is looking for a " + hand2.get(indexCpuChosen).getCard());
+                System.out.println("Your opponent is looking for a " + hand2.get(indexCpuChosen).getCard() + ".");
                 Card CardWanted = hand2.get(indexCpuChosen);
             
                 int current = computer.getPoints();
@@ -234,23 +178,22 @@ public class Gofish {
                     }
                 }
                 if (computer.getPoints() > current){ // If player has requested card
-                    System.out.println("You've given up your " + CardWanted.getCard()); 
-                    System.out.println("The CPU now has " + computer.getPoints() + " point(s).");
-                    frame.updateScoreBoard(player.getPoints(), computer.getPoints());                    
+                    System.out.println("You've given up your " + CardWanted.getCard() + "."); 
+                    frame.updateScoreboard(player.getPoints(), computer.getPoints());                    
                     System.out.println("--------------------------------------------------");
                 }
                 else { // If player does not have requested card
-                    System.out.println("Too bad. Your opponent fishes a cardfrom the deck.");
+                    System.out.println("Your opponent draws a card.");
                     hand2.add(deck.pop());
                     computer.CompareHand();
-                    frame.updateScoreBoard(player.getPoints(), computer.getPoints());
+                    frame.updateScoreboard(player.getPoints(), computer.getPoints());
                     System.out.println("--------------------------------------------------");
                 }
             }
             else if (!deck.isEmpty()){ // If CPU's hand is empty
                 hand2.add(deck.pop());
-                System.out.println("The CPU draws a card");
-                System.out.print("\n");
+                System.out.println("The CPU draws a card.");
+                System.out.println("--------------------------------------------------");
             }
             
             frame.updatePlayerCards(hand1);
@@ -258,13 +201,13 @@ public class Gofish {
             
         } while (!(deck.isEmpty())); // While the deck still has cards
         
-        System.out.println("The deck is empty! The game has finished!");
+        System.out.println("The deck is empty!\nThe game has finished!");
         
         Thread.sleep(1000);
         
         // TODO: Make a determine winner method.
         if (player.getPoints() > computer.getPoints()){ // Determines the winner
-            System.out.println("Congratulations! You are the winner!");
+            System.out.println("Congratulations!\nYou are the winner!");
         }
         else if (computer.getPoints() > player.getPoints()){
             System.out.println("Looks like you lost!");
@@ -277,7 +220,7 @@ public class Gofish {
      * TODO: 7 of diamond has ugly low-res picture
      * @return the shuffled deck in the form of a stack.
      */
-    public static MyStack<Card> createShuffledDeck(){ 
+    public void createShuffledDeck(){ 
         
         Card aceSpades = new Card("A","/AS.png");
         Card aceClubs = new Card("A","/ace_of_clubs.png");
@@ -340,7 +283,6 @@ public class Gofish {
         		tenSpades,tenClubs,tenHearts,tenDiamonds,jackSpades,jackClubs,jackHearts,jackDiamonds, 
         		queenSpades, queenClubs, queenHearts, queenDiamonds, kingSpades,kingClubs,kingHearts,kingDiamonds};
         
-        MyStack<Card> deck = new MyStack<Card>();
         
         Random rand = new Random();
         
@@ -355,7 +297,6 @@ public class Gofish {
         	deck.push(deckArray[i]);
         }
         
-        return deck;
     }
     
     

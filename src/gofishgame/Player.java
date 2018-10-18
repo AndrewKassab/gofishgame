@@ -50,7 +50,7 @@ public class Player{
             for (int j = i + 1; j < cards.size(); j++){
                 if (cards.get(i).getCard().equals(cards.get(j).getCard())){
                     points++;
-                    System.out.println(message + " a match with: " + cards.get(i).getCard() + " and " + cards.get(j).getCard() + ".");
+                    System.out.println(message + " a match with: " + cards.get(i).getCard() + "," + cards.get(j).getCard() + ".");
                     cards.remove(i);
                     cards.remove(j - 1);
                     CompareHand();    

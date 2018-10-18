@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import gofishgame.Card;
+import gofishgame.MyStack;
 
 /**
- * TODO: Add in continue button instead of using jOptionPane
+ * TODO: Add action listener for when deck size changes, the cardCounterText updates
+ * TODO: Turn card image JLabels into JButtons to use instead of JOptionPane, use instead of continue
  * @author PreciseMotion
  *
  */
@@ -21,13 +23,15 @@ public class GofishFrame {
 	private JPanel playerPanel;
 	private JPanel playerLabelPanel;
 	private JTextField playerScore;
+	private JTextArea cardCounterText;
+	private int cardCounter = 38;
 	private JPanel computerPanel;
 	private JPanel cpuLabelPanel;
 	private JTextArea computerScore;
 	private JTextArea outputTextArea;
 	private JScrollPane outputScrollPane;
 	private Font font1 = new Font("SansSerif", Font.BOLD, 25); // used for score text
-	private Font font2 = new Font("SansSerif", Font.BOLD, 18); // used for output window
+	private Font font2 = new Font("SansSerif", Font.BOLD, 17); // used for output window
 	private Box b = null; // For creating struts
 	
 	/**
@@ -66,15 +70,15 @@ public class GofishFrame {
 		playerLabelPanel.setBackground(Color.BLACK);
 		playerLabelPanel.setLayout(new BoxLayout(playerLabelPanel, BoxLayout.X_AXIS));
 		
-		playerScore = new JTextField();
-		playerScore.setText("Player Score: 0 ");
+		playerScore = new JTextField("Player Score: 0 ");
 		playerScore.setEditable(false);
 		playerScore.setBackground(mainFrame.getBackground());
 		playerScore.setBorder(null);
 		playerScore.setFont(font1);
 		
 		playerPanel.add(playerLabelPanel, BorderLayout.SOUTH);
-		playerPanel.add(playerScore, BorderLayout.LINE_END);
+		playerPanel.add(playerScore, BorderLayout.EAST);
+		playerPanel.add(cardCounterText, BorderLayout.BEFORE_FIRST_LINE);
 	}
 	
 	/**
@@ -125,17 +129,19 @@ public class GofishFrame {
 		computerPanel.add(deckLabel, BorderLayout.CENTER);
 		computerPanel.add(computerScore, BorderLayout.LINE_START);
 		computerPanel.add(outputScrollPane, BorderLayout.EAST);
-		
 	}
 	
 	public void createText() {
 		
-		computerScore = new JTextArea();
-		computerScore.setText("Score: 0");
+		computerScore = new JTextArea("Score: 0");
 		computerScore.setEditable(false);
 		computerScore.setPreferredSize(new Dimension(130,50));
 		computerScore.setFont(font1);
 		computerScore.setBackground(mainFrame.getBackground());
+		
+		cardCounterText = new JTextArea("Deck: 52");
+		cardCounterText.setFont(font1);
+		cardCounterText.setBackground(null);
 		
 		outputTextArea = new JTextArea();
 		outputTextArea.setFont(font2);
@@ -145,7 +151,7 @@ public class GofishFrame {
 		
 		outputScrollPane = new JScrollPane(outputTextArea);
 		outputScrollPane.setBorder(BorderFactory.createMatteBorder(3, 3, 3, 3, Color.GRAY));
-		outputScrollPane.setPreferredSize(new Dimension(350,250));
+		outputScrollPane.setPreferredSize(new Dimension(450,300));
 		
 	}
 	
@@ -186,17 +192,19 @@ public class GofishFrame {
 	 * @param pScore The player's current score
 	 * @param cScore The CPU's current score
 	 */
-	public void updateScoreBoard(int pScore, int cScore) {
+	public void updateScoreboard(int pScore, int cScore) {
 		playerScore.setText("Score: " + pScore);
 		computerScore.setText("Score: " + cScore);
 	}
 	
 	/**
-	 * Updates text in output text field so user can keep track of the game
-	 * @param text Text being inserted into the output field
+	 * Updates the card count for the deck whenever a card is 
+	 * popped from the stack.
+	 * @param <T>
 	 */
-	public void updateOutput(String text) {
-		outputTextArea.setText(outputTextArea.getText() + text + "\n");
+	public <T> void updateCardCount() {
+		cardCounter--;
+		cardCounterText.setText("Deck: " + cardCounter );
 	}
 	
 	/**
