@@ -2,7 +2,6 @@ package gofishgame;
 
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Stack;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.swing.JOptionPane;
@@ -12,15 +11,16 @@ import graphics.GofishFrame;
 /**
  * Go Fish game. This class contains all objects and methods 
  * to simulate a game of go fish. The user will be given a hand
- * of cards and pit against a CPU. 
+ * of cards and will play against a CPU. 
  * TODO: Remove the need for Thread.sleep() and interrupted exceptions
+ * by using buttons in the GUI.
  * @author PreciseMotion
- * @version 2.5
+ * @version 3.0
  */
 public class Gofish {
     
 	private GofishFrame frame;
-	private MyStack<Card> deck = new MyStack<Card>(frame); // Creates stack for deck of cards
+	private MyStack<Card> deck = new MyStack<Card>(); // Creates stack for deck of cards
 	private ArrayList<Card> hand1 = new ArrayList<Card>(); // Creates ArrayList for Player's hand
 	private ArrayList<Card> hand2 = new ArrayList<Card>(); // Creates ArrayList for CPU's hand
 	private PrintStream printStream;
@@ -48,8 +48,8 @@ public class Gofish {
 	}
 	
 	/**
-	 * Handles initialization of the card deck and each player's hand 
-	 * and sets up the game for it to begin.
+	 * Handles initialization of the card deck and each player's hand.
+	 * Sets up the game for it to begin.
 	 */
 	public void initCards() {
 		
@@ -57,10 +57,12 @@ public class Gofish {
 		
 		for (int i = 0; i < 7; i++){ // Player draws 7 cards
             hand1.add(deck.pop());
+            frame.updateCardCount();
         }
         
         for (int i = 0; i < 7; i++){ // CPU draws 7 cards
             hand2.add(deck.pop());
+            frame.updateCardCount();
         }            
         
         player = new Player(hand1,true);     
@@ -85,33 +87,57 @@ public class Gofish {
 	 */
 	public void gameLoop() throws InterruptedException {
 		
-		do {  
-			// If player has cards
-			if (!(hand1.isEmpty())){
-            	
-                boolean cont = false;
-                
-                do{  
-                	
-                	// Player requests card
-                    pchosen = JOptionPane.showInputDialog("Which card would you like to inquire your opponent for?"); 
-                    for (int i = 0; i < hand1.size(); i++){ 
-                         if (Character.toUpperCase(pchosen.charAt(0)) == hand1.get(i).getCard().charAt(0)){  // Makes sure player has requested card
-                             indexPlayerChosen = i;               
-                             cont = true;
-                             break;
-                         }
-                     }
-                    
-                    if (cont != true){
-                    	 System.out.println("Please try again, you do not have a " + pchosen + ".");
-                    }
-                    
-                } while (cont != true); // Until player requests a valid card
-               
+		do { 
+
+            playerTurn();
+            
+            frame.updatePlayerCards(hand1);
+            frame.updateComputerCards(hand2);
+            Thread.sleep(3000); // Allow player to process results
+           
+            computerTurn();
+
+            frame.updatePlayerCards(hand1);
+            frame.updateComputerCards(hand2);
+            
+        } while (!(deck.isEmpty())); // While the deck still has cards
+        
+        gameOver();
+
+	}
+	
+	public void playerTurn() {
+		
+		// If player has cards
+		if (!(hand1.isEmpty())){
+		            	
+		boolean cont = false;
+		                
+		    do{  
+		                	
+			    // Player requests card
+		        pchosen = JOptionPane.showInputDialog("Which card would you like to " +
+                    "inquire your opponent for?");
+
+                // Makes sure player has requested card
+	            for (int i = 0; i < hand1.size(); i++){ 
+	        	    if (Character.toUpperCase(pchosen.charAt(0)) == hand1.get(i).getCard().charAt(0))
+                    {  
+	        		    indexPlayerChosen = i;               
+                        cont = true;
+                        break;
+		            }
+	            }
+		                    
+	            if (cont != true){
+	        	    System.out.println("Please try again, you do not have a " + pchosen + ".");
+	            }
+		                  
+		    } while (cont != true); // Until player requests a valid card
+		               
                 int current = player.getPoints();
                 Card SeekingCard = hand1.get(indexPlayerChosen);
-            
+		            
                 for (int i = 0; i < hand2.size(); i++){ // Checks CPU's hand for card
                     if ( hand1.get(indexPlayerChosen).getCard().equals(hand2.get(i).getCard()) ){
                         player.incrementPoints();   
@@ -120,104 +146,118 @@ public class Gofish {
                         break;
                     }
                 }
-                
+		                
                 if (player.getPoints() > current){ // If CPU had requested card
-                    System.out.println("There is a match.\nYour opponent gives up their " + SeekingCard.getCard() + "."); 
-                    frame.updateScoreboard(player.getPoints(), computer.getPoints());
+                    System.out.println("There is a match.\nYour opponent gives up their " 
+                        + SeekingCard.getCard() + "."); 
                     
-                    System.out.println("--------------------------------------------------");
+                    frame.updateScoreboard(player.getPoints(), computer.getPoints());
+		                    
+		            System.out.println("--------------------------------------------------");
                 }
                 else { // If CPU did not have requested card
-                    System.out.println("Your opponent does not have a " + SeekingCard.getCard() + ".\nSorry, go fish.");
+                    System.out.println("Your opponent does not have a " + SeekingCard.getCard() 
+                        + ".\nSorry, go fish.");
                     hand1.add(deck.pop());
+                    frame.updateCardCount();
                     System.out.println("You drew a " + hand1.get(hand1.size()- 1).getCard() + ".");
                     player.setCards(hand1);
                     player.CompareHand();
                     frame.updateScoreboard(player.getPoints(), computer.getPoints());
-                    
+		                    
                     System.out.print("--------------------------------------------------\n");
                 }
             }
-			// If player's hand is empty
-            else { 
+		    
+            // If player's hand is empty
+	        else { 
                 hand1.add(deck.pop());
+                frame.updateCardCount();
                 System.out.println("You drew a " + hand1.get(hand1.size()- 1).getCard());
-                
+		                
                 System.out.println("--------------------------------------------------");
             }
+					
+	}
+	
+	public void computerTurn() {
+        if (!(hand2.isEmpty())){ // If CPU's hand is not empty
             
-            frame.updatePlayerCards(hand1);
-            frame.updateComputerCards(hand2);
+            int currentChosen = indexCpuChosen;
             
-            Thread.sleep(3000); // Allow player to process results
-            
-            if (!(hand2.isEmpty())){ // If CPU's hand is not empty
-                
-                int currentChosen = indexCpuChosen;
-                
-                if (hand2.size() == 1){ // If there is only one card in CPU's hand, selects that. 
-                    indexCpuChosen = 0;
-                }
-                else{
-                    do{   // Loops until card selected is not the same as what the CPU selected last turn     
-                        indexCpuChosen = ThreadLocalRandom.current().nextInt(0, hand2.size()); // Selects random card from CPU's hand                        
-                    } while (indexCpuChosen == currentChosen); 
-                }
-                
-                System.out.println("Your opponent is looking for a " + hand2.get(indexCpuChosen).getCard() + ".");
-                Card CardWanted = hand2.get(indexCpuChosen);
-            
-                int current = computer.getPoints();
-            
-                for (int i = 0; i < hand1.size(); i++){ // Check if player has requested card
-                    if ( hand2.get(indexCpuChosen).getCard().equals(hand1.get(i).getCard())){
-                        computer.incrementPoints();   
-                        hand2.remove(indexCpuChosen);
-                        hand1.remove(i);
-                        break;
-                    }
-                }
-                if (computer.getPoints() > current){ // If player has requested card
-                    System.out.println("You've given up your " + CardWanted.getCard() + "."); 
-                    frame.updateScoreboard(player.getPoints(), computer.getPoints());                    
-                    System.out.println("--------------------------------------------------");
-                }
-                else { // If player does not have requested card
-                    System.out.println("Your opponent draws a card.");
-                    hand2.add(deck.pop());
-                    computer.CompareHand();
-                    frame.updateScoreboard(player.getPoints(), computer.getPoints());
-                    System.out.println("--------------------------------------------------");
-                }
+            if (hand2.size() == 1){ // If there is only one card in CPU's hand, selects that. 
+                indexCpuChosen = 0;
             }
-            else if (!deck.isEmpty()){ // If CPU's hand is empty
-                hand2.add(deck.pop());
-                System.out.println("The CPU draws a card.");
-                System.out.println("--------------------------------------------------");
+            else{
+                // Loops until card selected is not the same as what the CPU selected last turn     
+                do{ 
+                    // Selects random card from CPU's hand                        
+                    indexCpuChosen = ThreadLocalRandom.current().nextInt(0, hand2.size());
+                } while (indexCpuChosen == currentChosen); 
             }
             
-            frame.updatePlayerCards(hand1);
-            frame.updateComputerCards(hand2);
-            
-        } while (!(deck.isEmpty())); // While the deck still has cards
+            System.out.println("Your opponent is looking for a " 
+                + hand2.get(indexCpuChosen).getCard() + ".");
+            Card CardWanted = hand2.get(indexCpuChosen);
         
+            int current = computer.getPoints();
+
+            // Check if player has requested card 
+            for (int i = 0; i < hand1.size(); i++){ 
+                if ( hand2.get(indexCpuChosen).getCard().equals(hand1.get(i).getCard())){
+                    computer.incrementPoints();   
+                    hand2.remove(indexCpuChosen);
+                    hand1.remove(i);
+                    break;
+                }
+            }
+            // If player has requested card
+            if (computer.getPoints() > current){ 
+                System.out.println("You've given up your " + CardWanted.getCard() + "."); 
+                frame.updateScoreboard(player.getPoints(), computer.getPoints());                    
+                System.out.println("--------------------------------------------------");
+            }
+            // If player does not have requested card
+            else{ 
+                System.out.println("Your opponent draws a card.");
+                hand2.add(deck.pop());
+                frame.updateCardCount();
+                computer.CompareHand();
+                frame.updateScoreboard(player.getPoints(), computer.getPoints());
+                System.out.println("--------------------------------------------------");
+            }
+        }
+        else if (!deck.isEmpty()){ // If CPU's hand is empty
+            hand2.add(deck.pop());
+            frame.updateCardCount();
+            System.out.println("The CPU draws a card.");
+            System.out.println("--------------------------------------------------");
+        }
+	}
+
+    /**
+     * Handles the end of the game, determines and displays
+     * the winner.
+     * @throws InterruptedException 
+    */
+    public void gameOver() throws InterruptedException{
         System.out.println("The deck is empty!\nThe game has finished!");
         
         Thread.sleep(1000);
         
-        // TODO: Make a determine winner method.
-        if (player.getPoints() > computer.getPoints()){ // Determines the winner
+        // Determines the winner 
+        if (player.getPoints() > computer.getPoints()){ 
             System.out.println("Congratulations!\nYou are the winner!");
         }
         else if (computer.getPoints() > player.getPoints()){
             System.out.println("Looks like you lost!");
         }
         else System.out.println("Its a draw!");
-	}
+        
+    }
 	
     /**
      * Creates a standard shuffled deck of 52 cards.
-     * TODO: 7 of diamond has ugly low-res picture
      * @return the shuffled deck in the form of a stack.
      */
     public void createShuffledDeck(){ 
@@ -278,14 +318,15 @@ public class Gofish {
         Card deckArray[] = {aceSpades,aceClubs,aceHearts,aceDiamonds,twoSpades,twoClubs,
         		twoHearts,twoDiamonds,threeSpades,threeClubs,threeHearts,threeDiamonds,fourSpades,
         		fourClubs,fourHearts,fourDiamonds,fiveSpades,fiveClubs,fiveHearts,fiveDiamonds,
-        		sixSpades,sixClubs,sixHearts,sixDiamonds,sevenSpades,sevenClubs,sevenHearts,sevenDiamonds,
-        		eightSpades,eightClubs,eightHearts,eightDiamonds,nineSpades,nineClubs,nineHearts,nineDiamonds,
-        		tenSpades,tenClubs,tenHearts,tenDiamonds,jackSpades,jackClubs,jackHearts,jackDiamonds, 
-        		queenSpades, queenClubs, queenHearts, queenDiamonds, kingSpades,kingClubs,kingHearts,kingDiamonds};
-        
+        		sixSpades,sixClubs,sixHearts,sixDiamonds,sevenSpades,sevenClubs,sevenHearts,
+                sevenDiamonds, eightSpades,eightClubs,eightHearts,eightDiamonds,nineSpades,
+                nineClubs,nineHearts,nineDiamonds,tenSpades,tenClubs,tenHearts,tenDiamonds,
+                jackSpades,jackClubs,jackHearts,jackDiamonds, queenSpades, queenClubs, 
+                queenHearts, queenDiamonds, kingSpades,kingClubs,kingHearts,kingDiamonds};
         
         Random rand = new Random();
-        
+       
+        // puts card into deck
         for (int i = deckArray.length - 1; i > 0; i--) {
         	int index = rand.nextInt(i+1);
         	Card a = deckArray[index];
@@ -293,6 +334,7 @@ public class Gofish {
         	deckArray[i] = a;
         }
         
+        // pushes the array into a stack for the deck
         for (int i = 0; i < 52; i++) {
         	deck.push(deckArray[i]);
         }

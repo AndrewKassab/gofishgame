@@ -2,8 +2,6 @@ package gofishgame;
 
 import java.util.Stack;
 
-import graphics.GofishFrame;
-
 interface StackInterface<T>
 {   
  
@@ -35,16 +33,14 @@ interface StackInterface<T>
 
 /**
  * Class implementing StackInterface in order to create 
- * a stack that will act as a deck of cards.
+ * a stack that will act as a deck of cards. 
 */
 public class MyStack<T> implements StackInterface<T>
 {
     Stack<T> theStack;
-    GofishFrame frame;
     
-    public MyStack(GofishFrame frame)
+    public MyStack()
     {
-    	this.frame = frame;
         theStack = new Stack<>();
     }
     public void push( T newEntry )
@@ -57,6 +53,7 @@ public class MyStack<T> implements StackInterface<T>
     } 
     public T pop()
     {   
+    	// Reduces deck counter by 1 each time you pop a card from the deck.
         return theStack.pop();
     } 
     public boolean isEmpty()

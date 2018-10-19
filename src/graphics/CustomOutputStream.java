@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import javax.swing.JTextArea;
 
+/**
+ * Handles creation of output stream which redirects
+ * the standard output into a text box.
+*/
 public class CustomOutputStream extends OutputStream {
 	
 	private JTextArea textArea;

@@ -11,9 +11,10 @@ import java.applet.*;
 import javax.imageio.ImageIO;
 
 /**
- * Object class for a playing card
+ * Object class for a playing card. A card has an 
+ * image and name.
  * @author PreciseMotion
- * @version 2.0
+ * @version 3.0
  */
 public class Card {
 	
@@ -23,6 +24,7 @@ public class Card {
 	public Card(String c, String path) {
 		card = c;
 		BufferedImage tempImage = null;
+        // Loads image into card
 		try {
 			tempImage = ImageIO.read(getClass().getResource(path));
 		} catch (Exception e) {

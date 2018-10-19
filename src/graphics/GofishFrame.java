@@ -9,22 +9,23 @@ import gofishgame.Card;
 import gofishgame.MyStack;
 
 /**
- * TODO: Add action listener for when deck size changes, the cardCounterText updates
- * TODO: Turn card image JLabels into JButtons to use instead of JOptionPane, use instead of continue
+ * This class handles all GUI components of the Gofish game. 
+ * TODO: Turn card image JLabels into JButtons to use instead of JOptionPane.
  * @author PreciseMotion
- *
+ * @version 3.0
  */
 public class GofishFrame {
 
 	private JFrame mainFrame;
 	private JLabel deckLabel;
+    // TODO: Turn into buttons instead of labels
 	private ArrayList<JLabel> computerCardLabels = new ArrayList<JLabel>();
 	private ArrayList<JLabel> playerCardLabels = new ArrayList<JLabel>();
 	private JPanel playerPanel;
 	private JPanel playerLabelPanel;
 	private JTextField playerScore;
 	private JTextArea cardCounterText;
-	private int cardCounter = 38;
+	private int cardCounter = 52;
 	private JPanel computerPanel;
 	private JPanel cpuLabelPanel;
 	private JTextArea computerScore;
@@ -39,7 +40,6 @@ public class GofishFrame {
 	 * create all swing components that will be present on the frame.
 	 */
 	public GofishFrame() {
-		
 		mainFrame = new JFrame("Go Fish!");
 		mainFrame.setSize(900,580);
 		mainFrame.setLayout(new BorderLayout());
@@ -51,7 +51,6 @@ public class GofishFrame {
 		mainFrame.add(computerPanel, BorderLayout.NORTH);
 		mainFrame.setVisible(true);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	
 	}
 	
 	/**
@@ -59,17 +58,19 @@ public class GofishFrame {
 	 */
 	public void playerPanel() {
 		
-		playerPanel = new JPanel();
+        playerPanel = new JPanel();
 		playerPanel.setPreferredSize(new Dimension(100,200));
 		playerPanel.setLayout(new BorderLayout());
-		
+        // Creates whitespace around border
 		playerPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 5, 5)); 
 
+        // Holds card images
 		playerLabelPanel = new JPanel();
 		playerLabelPanel.setPreferredSize(new Dimension(100,140));
 		playerLabelPanel.setBackground(Color.BLACK);
 		playerLabelPanel.setLayout(new BoxLayout(playerLabelPanel, BoxLayout.X_AXIS));
 		
+        // Score counter for player
 		playerScore = new JTextField("Player Score: 0 ");
 		playerScore.setEditable(false);
 		playerScore.setBackground(mainFrame.getBackground());
@@ -90,25 +91,25 @@ public class GofishFrame {
 		computerPanel.setPreferredSize(new Dimension(100,330));
 		computerPanel.setLocation(0,400);
 		computerPanel.setLayout(new BorderLayout());
-		
 		// Creates whitespace around border
 		computerPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5)); 
 	
+        // Holds card images
 		cpuLabelPanel = new JPanel();
-		cpuLabelPanel.setPreferredSize(new Dimension(50,170)); // Contains card images
+		cpuLabelPanel.setPreferredSize(new Dimension(50,170)); 
 		cpuLabelPanel.setBackground(Color.BLACK);
 		cpuLabelPanel.setLayout(new BoxLayout(cpuLabelPanel, BoxLayout.X_AXIS));
 		computerPanel.add(cpuLabelPanel, BorderLayout.NORTH); // Add panel to top of current panel
 		BufferedImage deck = null;
-		
-		// TODO: Change deck and card backing images later
-		
+	
+        // Loads image for deck  of cards located in center.
 		try {
 			deck = ImageIO.read(getClass().getResource("/back.png"));
 		} catch (Exception e) {
 			System.out.println("Failed to load deck image - " + e.getMessage());
 		}
 		
+        // Sets up the deck image
 		deckLabel = new JLabel(new ImageIcon(deck));
 		deckLabel.setPreferredSize(new Dimension(50,100));
 		
@@ -123,14 +124,15 @@ public class GofishFrame {
 		for (int i = 0; i < 5; i++) {
 			computerCardLabels.add(new JLabel(new ImageIcon(deck)));
 		}
-		
-		
-		
+
 		computerPanel.add(deckLabel, BorderLayout.CENTER);
 		computerPanel.add(computerScore, BorderLayout.LINE_START);
 		computerPanel.add(outputScrollPane, BorderLayout.EAST);
 	}
-	
+    
+    /**
+     * Handles creation of all text related objects on the panels
+    */
 	public void createText() {
 		
 		computerScore = new JTextArea("Score: 0");
@@ -139,7 +141,7 @@ public class GofishFrame {
 		computerScore.setFont(font1);
 		computerScore.setBackground(mainFrame.getBackground());
 		
-		cardCounterText = new JTextArea("Deck: 52");
+		cardCounterText = new JTextArea("Deck: " + cardCounter);
 		cardCounterText.setFont(font1);
 		cardCounterText.setBackground(null);
 		
@@ -158,7 +160,7 @@ public class GofishFrame {
 	/**
 	 * Updates the amount of cards showing on the computer player's 
 	 * side of the game depending on how many cards they are holding.
-	 * @param hand
+	 * @param hand The hand of cards being updated
 	 */
 	public void updateComputerCards(ArrayList<Card> hand) {
 		cpuLabelPanel.removeAll();
@@ -172,7 +174,7 @@ public class GofishFrame {
 	
 	/**
 	 * Updates the cards being displayed on the player's side.
-	 * @param hand
+	 * @param hand The hand of cards being updated
 	 */
 	public void updatePlayerCards(ArrayList<Card> hand) {
 		playerLabelPanel.removeAll();
@@ -202,14 +204,14 @@ public class GofishFrame {
 	 * popped from the stack.
 	 * @param <T>
 	 */
-	public <T> void updateCardCount() {
+	public void updateCardCount() {
 		cardCounter--;
 		cardCounterText.setText("Deck: " + cardCounter );
 	}
 	
 	/**
 	 * Used to access the output text area for stdout redirection
-	 * @return
+	 * @return the output box
 	 */
 	public JTextArea getOutputArea() {
 		return outputTextArea;
