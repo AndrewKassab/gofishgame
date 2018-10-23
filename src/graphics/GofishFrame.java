@@ -1,6 +1,8 @@
 package graphics;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
@@ -10,7 +12,7 @@ import gofishgame.MyStack;
 
 /**
  * This class handles all GUI components of the Gofish game. 
- * TODO: Turn card image JLabels into JButtons to use instead of JOptionPane.
+ * TODO: Turn card image JButtons into JButtons to use instead of JOptionPane.
  * @author PreciseMotion
  * @version 3.0
  */
@@ -18,16 +20,16 @@ public class GofishFrame {
 
 	private JFrame mainFrame;
 	private JLabel deckLabel;
-    // TODO: Turn into buttons instead of labels
+    // TODO: Turn into buttons instead of Buttons
 	private ArrayList<JLabel> computerCardLabels = new ArrayList<JLabel>();
-	private ArrayList<JLabel> playerCardLabels = new ArrayList<JLabel>();
+	private ArrayList<JButton> playerCardButtons = new ArrayList<JButton>();
 	private JPanel playerPanel;
-	private JPanel playerLabelPanel;
+	private JPanel playerButtonPanel;
 	private JTextField playerScore;
 	private JTextArea cardCounterText;
 	private int cardCounter = 52;
 	private JPanel computerPanel;
-	private JPanel cpuLabelPanel;
+	private JPanel cpuButtonPanel;
 	private JTextArea computerScore;
 	private JTextArea outputTextArea;
 	private JScrollPane outputScrollPane;
@@ -35,6 +37,12 @@ public class GofishFrame {
 	private Font font2 = new Font("SansSerif", Font.BOLD, 17); // used for output window
 	private Box b = null; // For creating struts
 	
+	private ActionListener actionListener = new ActionListener() {
+		public void actionPerformed(ActionEvent evt) {
+			buttonPressed(evt);
+		}
+	};
+
 	/**
 	 * The Constructor. Creates a new JFrame and calls the methods required to 
 	 * create all swing components that will be present on the frame.
@@ -65,10 +73,10 @@ public class GofishFrame {
 		playerPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 5, 5)); 
 
         // Holds card images
-		playerLabelPanel = new JPanel();
-		playerLabelPanel.setPreferredSize(new Dimension(100,140));
-		playerLabelPanel.setBackground(Color.BLACK);
-		playerLabelPanel.setLayout(new BoxLayout(playerLabelPanel, BoxLayout.X_AXIS));
+		playerButtonPanel = new JPanel();
+		playerButtonPanel.setPreferredSize(new Dimension(100,140));
+		playerButtonPanel.setBackground(Color.BLACK);
+		playerButtonPanel.setLayout(new BoxLayout(playerButtonPanel, BoxLayout.X_AXIS));
 		
         // Score counter for player
 		playerScore = new JTextField("Player Score: 0 ");
@@ -77,7 +85,7 @@ public class GofishFrame {
 		playerScore.setBorder(null);
 		playerScore.setFont(font1);
 		
-		playerPanel.add(playerLabelPanel, BorderLayout.SOUTH);
+		playerPanel.add(playerButtonPanel, BorderLayout.SOUTH);
 		playerPanel.add(playerScore, BorderLayout.EAST);
 		playerPanel.add(cardCounterText, BorderLayout.BEFORE_FIRST_LINE);
 	}
@@ -95,11 +103,11 @@ public class GofishFrame {
 		computerPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5)); 
 	
         // Holds card images
-		cpuLabelPanel = new JPanel();
-		cpuLabelPanel.setPreferredSize(new Dimension(50,170)); 
-		cpuLabelPanel.setBackground(Color.BLACK);
-		cpuLabelPanel.setLayout(new BoxLayout(cpuLabelPanel, BoxLayout.X_AXIS));
-		computerPanel.add(cpuLabelPanel, BorderLayout.NORTH); // Add panel to top of current panel
+		cpuButtonPanel = new JPanel();
+		cpuButtonPanel.setPreferredSize(new Dimension(50,170)); 
+		cpuButtonPanel.setBackground(Color.BLACK);
+		cpuButtonPanel.setLayout(new BoxLayout(cpuButtonPanel, BoxLayout.X_AXIS));
+		computerPanel.add(cpuButtonPanel, BorderLayout.NORTH); // Add panel to top of current panel
 		BufferedImage deck = null;
 	
         // Loads image for deck  of cards located in center.
@@ -116,8 +124,8 @@ public class GofishFrame {
 		// Creates 7 cards to display
 		for (int i = 0; i < 7; i++) {
 			computerCardLabels.add(new JLabel(new ImageIcon(deck)));
-			cpuLabelPanel.add(computerCardLabels.get(i));
-			cpuLabelPanel.add(b.createHorizontalStrut(10));
+			cpuButtonPanel.add(computerCardLabels.get(i));
+			cpuButtonPanel.add(b.createHorizontalStrut(10));
 		}
 		
 		// Create extra cards but don't display, incase CPU holds over 7 cards.
@@ -158,18 +166,27 @@ public class GofishFrame {
 	}
 	
 	/**
+	 * Handles the event in which a button on the player panel
+	 * is pressed. (The player is selecting a card to prompt for)
+	 * @param evt button pressed
+	 */
+	public void buttonPressed(ActionEvent evt) {
+		
+	}
+	
+	/**
 	 * Updates the amount of cards showing on the computer player's 
 	 * side of the game depending on how many cards they are holding.
 	 * @param hand The hand of cards being updated
 	 */
 	public void updateComputerCards(ArrayList<Card> hand) {
-		cpuLabelPanel.removeAll();
+		cpuButtonPanel.removeAll();
 		for (int i = 0; i < hand.size(); i++) {
-			cpuLabelPanel.add(computerCardLabels.get(i));
-			cpuLabelPanel.add(b.createHorizontalStrut(10));
+			cpuButtonPanel.add(computerCardLabels.get(i));
+			cpuButtonPanel.add(b.createHorizontalStrut(10));
 		}
-		cpuLabelPanel.revalidate();
-		cpuLabelPanel.repaint();
+		cpuButtonPanel.revalidate();
+		cpuButtonPanel.repaint();
 	}
 	
 	/**
@@ -177,16 +194,19 @@ public class GofishFrame {
 	 * @param hand The hand of cards being updated
 	 */
 	public void updatePlayerCards(ArrayList<Card> hand) {
-		playerLabelPanel.removeAll();
-		playerCardLabels.clear();
+		playerButtonPanel.removeAll();
+		playerCardButtons.clear();
 		BufferedImage tempImage = null;
 		for (int i = 0; i < hand.size(); i++) {
-			playerCardLabels.add(new JLabel(new ImageIcon(hand.get(i).getImg())));
-			playerLabelPanel.add(playerCardLabels.get(i));
-			playerLabelPanel.add(b.createHorizontalStrut(10));
+			playerCardButtons.add(new JButton(new ImageIcon(hand.get(i).getImg())));
+			playerCardButtons.get(i).setBorder(BorderFactory.createEmptyBorder());
+			playerCardButtons.get(i).setContentAreaFilled(false);
+			playerCardButtons.get(i).addActionListener()
+			playerButtonPanel.add(playerCardButtons.get(i));
+			playerButtonPanel.add(b.createHorizontalStrut(10));
 		}
-		playerLabelPanel.revalidate();
-		playerLabelPanel.repaint();
+		playerButtonPanel.revalidate();
+		playerButtonPanel.repaint();
 	}
 	
 	/**

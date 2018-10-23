@@ -87,8 +87,11 @@ public class Gofish {
 	 */
 	public void gameLoop() throws InterruptedException {
 		
-		do { 
+		//do { 
 
+			//if (hand1.isEmpty()) {
+				// draw card method
+			//}
             playerTurn();
             
             frame.updatePlayerCards(hand1);
@@ -100,9 +103,9 @@ public class Gofish {
             frame.updatePlayerCards(hand1);
             frame.updateComputerCards(hand2);
             
-        } while (!(deck.isEmpty())); // While the deck still has cards
-        
-        gameOver();
+        //} while (!(deck.isEmpty())); // While the deck still has cards
+        // ActionListener for when the deck is empty, and both hands are empty, call gameOver
+        // gameOver();
 
 	}
 	
