@@ -27,6 +27,7 @@
    - Cutting down code into smaller and more efficient methods. 
    - Simple CPU / A.I player coding. 
    - How to work with a game
+   - Using external resources (images, etc.) 
    
  # Goals 
    
