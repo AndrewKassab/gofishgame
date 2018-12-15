@@ -2,6 +2,10 @@
 
    This is a G.U.I recreation of the popular card game Go Fish. You will be set up to play 
    against a CPU. 
+   
+   
+
+![image](https://drive.google.com/uc?export=view&id=1GifZkeTQKNYru98zXvyIWghy7dfc4HRa)
 
 # How to play
 
