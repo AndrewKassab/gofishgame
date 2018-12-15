@@ -1,8 +1,17 @@
 # gofish
 
-   This is a simple game of Go fish. You will be set up to play 
-   go fish against a CPU. 
+   This is a G.U.I recreation of the popular card game Go Fish. You will be set up to play 
+   against a CPU. 
 
+# How to play
+
+   This game follows standard rules for go fish. You will ask your opponent
+   for a card in hopes of obtaining a match. If your hand is empty, you will
+   draw a card instead. The player with the most matches at the end wins. 
+
+   - When asking for face cards, use the first letter of the card's name,
+   for example when asking for a king, just input 'K'.
+   
 # Project Details
    
    This project began as a simple text-based game as a tool for learning
@@ -24,14 +33,7 @@
    - Turn cards to JButtons, add action listeners and use buttons to intereact with game
    rather than prompting user input through text. 
     
-# How to play
 
-   This game follows standard rules for go fish. You will ask your opponent
-   for a card in hopes of obtaining a match. If your hand is empty, you will
-   draw a card instead. The player with the most matches at the end wins. 
-
-   - When asking for face cards, use the first letter of the card's name,
-   for example when asking for a king, just input 'K'.
 
 
    
