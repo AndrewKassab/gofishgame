@@ -22,22 +22,7 @@
    how to use stacks and eventually evolved into my tool for learning
    how to use swing and java GUIs.
    
- # What I learned
-   
-   - Updating and maintaining old code, making cleaner code / documentation
-   - Using and creating GUIs in Java, managing multiple components and layout managers. 
-   - How to efficiently debug a program.
-   - Cutting down code into smaller and more efficient methods. 
-   - Simple CPU / A.I player coding. 
-   - How to work with a game
-   - Using external resources (images, etc.) 
-   
  # Goals 
    
    - Turn cards to JButtons, add action listeners and use buttons to intereact with game
-   rather than prompting user input through text. 
-    
-
-
-
-   
+   rather than prompting user input through text.
