@@ -8,7 +8,7 @@
 ![image](https://drive.google.com/uc?export=view&id=1GifZkeTQKNYru98zXvyIWghy7dfc4HRa)
 
 # Setup
-   - Download and run the executable jar file
+   - Download and run the executable jar file  
    OR
    - Clone the project and run it from within eclipse or the command line 
    
