@@ -9,7 +9,7 @@
 
 # Setup
    - Download and run the executable jar file  
-   OR
+   **OR**
    - Clone the project and run it from within eclipse or the command line 
    
 # How to Play
