@@ -7,7 +7,11 @@
 
 ![image](https://drive.google.com/uc?export=view&id=1GifZkeTQKNYru98zXvyIWghy7dfc4HRa)
 
-# How to play
+# Setup ( 2 Options )
+   - 1: Download and run the executable jar file
+   - 2: Clone the project and run it from within eclipse or the command line 
+   
+# How to Play
 
    This game follows standard rules for go fish. You will ask your opponent
    for a card in hopes of obtaining a match. If your hand is empty, you will
