@@ -14,6 +14,7 @@ public class Main {
 	public static void main(String[] args) throws InterruptedException {
 		
 		GofishFrame frame = new GofishFrame();
+		@SuppressWarnings("unused")
 		Gofish game = new Gofish(frame);
 
 	}

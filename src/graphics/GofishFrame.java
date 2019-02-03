@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import gofishgame.Card;
-import gofishgame.MyStack;
 
 /**
  * This class handles all GUI components of the Gofish game. 
@@ -33,7 +32,6 @@ public class GofishFrame {
 	private JScrollPane outputScrollPane;
 	private Font font1 = new Font("SansSerif", Font.BOLD, 25); // used for score text
 	private Font font2 = new Font("SansSerif", Font.BOLD, 17); // used for output window
-	private Box b = null; // For creating struts
 	
 	/**
 	 * The Constructor. Creates a new JFrame and calls the methods required to 
@@ -117,7 +115,7 @@ public class GofishFrame {
 		for (int i = 0; i < 7; i++) {
 			computerCardLabels.add(new JLabel(new ImageIcon(deck)));
 			cpuLabelPanel.add(computerCardLabels.get(i));
-			cpuLabelPanel.add(b.createHorizontalStrut(10));
+			cpuLabelPanel.add(Box.createHorizontalStrut(10));
 		}
 		
 		// Create extra cards but don't display, incase CPU holds over 7 cards.
@@ -166,7 +164,7 @@ public class GofishFrame {
 		cpuLabelPanel.removeAll();
 		for (int i = 0; i < hand.size(); i++) {
 			cpuLabelPanel.add(computerCardLabels.get(i));
-			cpuLabelPanel.add(b.createHorizontalStrut(10));
+			cpuLabelPanel.add(Box.createHorizontalStrut(10));
 		}
 		cpuLabelPanel.revalidate();
 		cpuLabelPanel.repaint();
@@ -179,11 +177,10 @@ public class GofishFrame {
 	public void updatePlayerCards(ArrayList<Card> hand) {
 		playerLabelPanel.removeAll();
 		playerCardLabels.clear();
-		BufferedImage tempImage = null;
 		for (int i = 0; i < hand.size(); i++) {
 			playerCardLabels.add(new JLabel(new ImageIcon(hand.get(i).getImg())));
 			playerLabelPanel.add(playerCardLabels.get(i));
-			playerLabelPanel.add(b.createHorizontalStrut(10));
+			playerLabelPanel.add(Box.createHorizontalStrut(10));
 		}
 		playerLabelPanel.revalidate();
 		playerLabelPanel.repaint();

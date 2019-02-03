@@ -1,4 +1,4 @@
-# gofish
+# gofish (v3.1)
 
    This is a simple game of Go fish. You will be set up to play 
    go fish against a CPU. 

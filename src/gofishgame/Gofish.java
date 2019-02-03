@@ -113,25 +113,35 @@ public class Gofish {
 		            	
 		boolean cont = false;
 		                
-		    do{  
-		                	
-			    // Player requests card
-		        pchosen = JOptionPane.showInputDialog("Which card would you like to " +
-                    "inquire your opponent for?");
+		    do{
+		    	try {   	
+			    	// Player requests card
+		        	pchosen = JOptionPane.showInputDialog("Which card would you like to " +
+		        			"inquire your opponent for?");
 
-                // Makes sure player has requested card
-	            for (int i = 0; i < hand1.size(); i++){ 
-	        	    if (Character.toUpperCase(pchosen.charAt(0)) == hand1.get(i).getCard().charAt(0))
-                    {  
-	        		    indexPlayerChosen = i;               
-                        cont = true;
-                        break;
-		            }
-	            }
+		        	// Makes sure player has requested card
+		        	for (int i = 0; i < hand1.size(); i++){ 
+		        		if (Character.toUpperCase(pchosen.charAt(0)) == 
+		        				hand1.get(i).getCard().charAt(0))
+		        		{  
+		        			indexPlayerChosen = i;               
+		        			cont = true;
+		        			break;
+		        		}
+		        	}
 		                    
-	            if (cont != true){
-	        	    System.out.println("Please try again, you do not have a " + pchosen + ".");
-	            }
+		        	if (cont != true){
+		        		System.out.println("Please try again, you do not have a " + pchosen + ".");
+		        	}
+		        // User closed dialogue box, prompting program to quit 	
+		    	} catch ( NullPointerException e ) {
+		    		System.out.println("Exiting...");
+		    		System.exit(0);
+		    	}
+		    	// User did not enter any input
+		        catch ( Exception e ){
+		        	System.out.println("Invalid input, please try again.");
+		    	}
 		                  
 		    } while (cont != true); // Until player requests a valid card
 		               
