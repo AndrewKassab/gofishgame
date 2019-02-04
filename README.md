@@ -31,3 +31,4 @@
    
    - Turn cards to JButtons, add action listeners and use buttons to intereact with game
    rather than prompting user input through text.
+   - Acknowledge full names for face cards.
