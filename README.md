@@ -21,13 +21,7 @@
    - When asking for face cards, use the first letter of the card's name,
    for example when asking for a king, just input 'K'.
    
-# Project Details
-   
-   This project began as a simple text-based game as a tool for learning
-   how to use stacks and eventually evolved into my tool for learning
-   how to use swing and java GUIs.
-   
- # Goals 
+ # Goals (v4.0)
    
    - Turn cards to JButtons, add action listeners and use buttons to intereact with game
    rather than prompting user input through text.
