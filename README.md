@@ -27,3 +27,4 @@
    rather than prompting user input through text.
    - Acknowledge full names for face cards.
    - Change to 'an' when referring to specific cards with vowel sounds.
+   - Refactor Code , fix poor style
