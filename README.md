@@ -27,4 +27,5 @@
    rather than prompting user input through text.
    - Acknowledge full names for face cards.
    - Change to 'an' when referring to specific cards with vowel sounds.
+   - End game only when Deck AND Hands are both empty
    - Refactor Code , fix poor style
