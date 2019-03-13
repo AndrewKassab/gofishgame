@@ -10,37 +10,37 @@ import javax.imageio.ImageIO;
  * @version 3.0
  */
 public class Card {
-	
-	String card;
-	BufferedImage img = null;
-	
-	public Card(String c, String path) {
-		card = c;
-		BufferedImage tempImage = null;
-        // Loads image into card
-		try {
-			tempImage = ImageIO.read(getClass().getResource(path));
-		} catch (Exception e) {
-			System.out.println("Error loading image - " + path + " " + e.getMessage());
-			System.exit(0);
-		}
-		img = tempImage;
-	}
-	
-	public String getCard() {
-		return card;
-	}
+  
+  String card;
+  BufferedImage img = null;
+  
+  public Card(String c, String path) {
+    card = c;
+    BufferedImage tempImage = null;
+    // Loads image into card
+    try {
+      tempImage = ImageIO.read(getClass().getResource(path));
+    } catch (Exception e) {
+      System.out.println("Error loading image - " + path + " " + e.getMessage());
+      System.exit(0);
+    }
+    img = tempImage;
+  }
+  
+  public String getCard() {
+    return card;
+  }
 
-	public void setCard(String c) {
-		this.card = c;
-	}
+  public void setCard(String c) {
+    this.card = c;
+  }
 
-	public BufferedImage getImg() {
-		return img;
-	}
+  public BufferedImage getImg() {
+    return img;
+  }
 
-	public void setImg(BufferedImage img) {
-		this.img = img;
-	}	
-	
+  public void setImg(BufferedImage img) {
+    this.img = img;
+  }  
+  
 }
