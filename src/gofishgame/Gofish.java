@@ -4,6 +4,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.Stack;
 import javax.swing.JOptionPane;
 import graphics.CustomOutputStream;
 import graphics.GofishFrame;
@@ -21,7 +22,7 @@ import graphics.GofishFrame;
 public class Gofish {
     
   private GofishFrame frame;
-  private MyStack<Card> deck = new MyStack<Card>(); // Creates stack for deck of cards
+  private Stack<Card> deck = new Stack<Card>(); // Creates stack for deck of cards
   private ArrayList<Card> hand1 = new ArrayList<Card>(); // Creates ArrayList for Player's hand
   private ArrayList<Card> hand2 = new ArrayList<Card>(); // Creates ArrayList for CPU's hand
   private PrintStream printStream;
